@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block title %}BlogPost{% endblock title %}
+
+{% block body %}
+{% load humanize %}
+{% load extras %}
+<div class="container my-3">
+    <h2 class="blog-post-title">{{post.title}}</h2>
+    <p class="blog-post-meta">{{post.timeStamp}} by <a href="/about">{{post.author}}</a> (<span>{{post.views}} views</span>)</p>
+    <p>{{post.content|safe}}</p>
+    <hr>
+</div>
+<div class="container">
+    <h2>Add a comment</h2>
+    {% if not user.is_anonymous %}
+    <div class="my-2">
+        <form action="postComment/" method="post">{% csrf_token %}
+
+            <div class="form-outline w-100">
+                <textarea class="form-control" id="comment" rows="4" name="comment"
+                    placeholder="Enter your comment here" style="background: #fff;" required></textarea>
+                <input type="hidden" name='postSno' value="{{post.sno}}">
+                <input type="hidden" name='parentSno' value="">
+
+
+            </div>
+            <div class="float-end mt-2 pt-1">
+                <button type="submit" class="btn btn-primary btn-sm">Post comment</button>
+            </div>
+        </form>
+    </div>
+    {% else %}
+    <h3>Login to post a comment</h3>
+    {% endif %}
+    <h4 class="mb-0 mt-4">Recent comments ({{comments.count}}) </h4>
+    <p class="fw-light mb-4 pb-2">Latest Comments section by users </p>
+
+    {% for comment in comments %}
+    <div class='container mt-4'>
+        <div class="d-flex flex-start mt-2 ">
+            <img class="rounded-circle shadow-1-strong me-3" src="/static/img/60111.jpg" alt="avatar" width="60"
+                height="60" />
+            <div>
+                <h6 class="fw-bold mb-1">{{comment.user.username}}</h6>
+                <div class="d-flex align-items-center mb-1">
+                    <p class="mb-0 badge bg-primary">
+                        {{comment.timestamp| naturaltime}}
+                    </p>
+                </div>
+                <p class="mb-0">
+                    {{comment.comment}}
+                </p>
+                <div class="reply mx-0">
+
+                    {% if not user.is_anonymous %}
+                    
+                    <button class="btn btn-primary btn-sm mb-1" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#replybox{{comment.sno}}" aria-expanded="false"
+                        aria-controls="replybox{{comment.sno}}">
+                        Reply
+                    </button>
+                    {% endif %}
+
+
+                    <div class="collapse" id="replybox{{comment.sno}}">
+                        <div class="my-2">
+                            <form action="postComment/" method="post">{% csrf_token %}
+
+
+                                <textarea class="form-control" id="comment1" rows="4" name="comment"
+                                    placeholder="Enter your comment here" style="background: #fff;" required></textarea>
+                                <input type="hidden" name='parentSno' value="{{comment.sno}}">
+                                <input type="hidden" name='postSno' value="{{post.sno}}">
+
+
+
+                                <div class="float-end mt-2 pt-1">
+                                    <button type="submit" class="btn btn-primary btn-sm mb-2">Post Reply</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="replies" style="margin-top: 40px;">
+                        {% for reply in replyDict|get_val:comment.sno %}
+
+
+
+                        <div class="container" >
+
+                            <div class="d-flex flex-start my-3">
+                                <img class="rounded-circle shadow-1-strong me-3" src="/static/img/60111.jpg"
+                                    alt="avatar" width="50" height="50" />
+                                <div>
+                                    <h6 class="fw-bold mb-1">{{reply.user.username}}</h6>
+                                    <div class="d-flex align-items-center mb-1">
+                                        <p class="mb-0 badge bg-primary">
+                                            {{reply.timestamp| naturaltime}}
+
+                                        </p>
+                                    </div>
+                                    <p class="mb-0">
+                                        {{reply.comment}}
+
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="my-0" />
+
+
+
+
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="my-0" />
+    </div>
+    {% endfor %}
+</div>
+
+
+
+
+</div>
+
+{% endblock body %}

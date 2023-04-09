@@ -1,0 +1,56 @@
+{% extends 'base.html' %} {% block title %}Home{% endblock title %}
+{% block homeactive %}active{% endblock homeactive %} {% block body %}
+{% block js %}
+<script>
+
+    Array.from(document.getElementsByClassName('preview1')).forEach((element) => {
+        element.innerHTML = element.innerText;
+    })
+    var typed = new Typed('#typed',{
+                    strings:[" Welcome to BlogCity"],
+                    backSpeed: 15,
+                    smartBackspace: true,
+                    backDelay: 1200,
+                    startDelay: 1000,
+                    typeSpeed: 25,
+                    loop: false,
+                    showCursor: true,
+                    // loopCount:2
+
+                  });
+
+
+</script>
+
+{% endblock js %}
+<div class="container">
+    <div class="p-5 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold"><span id="typed"></span></h1>
+            <p class="col-md-8 fs-4">
+                Using a series of utilities, you can create this jumbotron, just like
+                the one in previous versions of Bootstrap. Check out the examples below
+                for how you can remix and restyle it to your liking.
+            </p>
+            <a class="btn btn-primary btn-lg" href="/blog" role="button">Go to blog</a>
+        </div>
+    </div>
+    <h2 class="text-center mb-4">Most Viewed BlogPost</h2>
+
+    <div class="row mb-2">
+        {% for item in posts %}
+
+        <div class="card text-center my-2 mx-2" style="width: 360px;">
+            <div class="card-header">{{item.author}}</div>
+            <div class="card-body">
+                <h5 class="card-title">{{item.title}}</h5>
+                <p class="card-text"><div class="preview1">{{item.content|safe|truncatechars:250}}</div></p>
+                <a href="blog/{{item.slug}}" class="btn btn-primary">Read More</a>
+            </div>
+            <div class="card-footer text-muted">{{item.timeStamp}}</div>
+        </div>
+    
+        {% endfor %}
+    </div>
+</div>
+{% endblock body %}

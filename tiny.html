@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+            selector: '#mytextarea',
+            width:'99vw',
+            height:300,
+            plugins: [
+                'advlist', 'autolink', 'link', 'image', 'lists', 'charmap', 'preview', 'anchor', 'pagebreak',
+                'searchreplace', 'wordcount', 'visualblocks', 'visualchars', 'code', 'fullscreen', 'insertdatetime',
+                'media', 'table', 'emoticons', 'template', 'help'
+            ], toolbar: 'undo redo | styles | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | print preview media | forecolor backcolor emoticons', menu: {
+                favs: { title: 'My Favorites', items: 'code visualaid | searchreplace | emoticons' }
+            },
+            menubar: 'favs file edit view insert format tools table help'
+            , content_css: 'css/content.css',
+        });
+    </script>
+</head>
+
+<body>
+    <h1>TinyMCE Quick Start Guide</h1>
+    <form method="post">
+        <textarea id="mytextarea">Hello, World!</textarea>
+    </form>
+    <button id="bt">GET HTML</button>
+    <div id="myHtml"></div>
+</body>
+<script>
+    bt.addEventListener('click', (e) => {
+        myHtml.innerText = tinyMCE.get('mytextarea').getContent();
+    })
+</script>
+
+</html>
